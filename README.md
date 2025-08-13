@@ -2,6 +2,12 @@
 ## 🎯 Objetivo
 Desarrollar una aplicación web en React que consuma la API pública de Disney y presente un catálogo de personajes con funcionalidad básica de autenticación simulada y favoritos.
 
+## Pasos
+1. Clona este repositorio.
+2. npm install
+3. npm run dev
+
+
 ## 📋 Requerimientos funcionales (Prioridad Alta)
 
 ### 1. Rutas y navegación (React Router)
