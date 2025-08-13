@@ -1,12 +1,21 @@
 # 💻 Prueba Técnica – React App Disney World Catalogue 
 ## 🎯 Objetivo
-Desarrollar una aplicación web en React que consuma la API pública de Disney y presente un catálogo de personajes con funcionalidad básica de autenticación simulada y favoritos.
+Desarrollar una aplicación web en React que consuma la API pública de Disney y presente un catálogo de personajes con funcionalidad de búsqueda y favoritos.
 
 ## Pasos
 1. Clona este repositorio.
-2. npm install
-3. npm run dev
+2. Ejecuta `npm install`
+3. Ejecuta `npm run dev`
 
+## 🛠️ Tecnologías incluidas en el proyecto
+- React
+- TypeScript
+- Tailwind CSS
+- Zustand
+- React Query
+- React Router
+- ShadCn (opcional) - Puedes incluir componentes de esta librería si lo deseas.
+- Lucide Icons
 
 ## 📋 Requerimientos funcionales (Prioridad Alta)
 
@@ -30,9 +39,9 @@ Se deben implementar **3 rutas principales**:
     - **Cantidad de películas** en las que ha aparecido.
     - **Cantidad de juegos** en los que ha aparecido.
     - **Cantidad de atracciones** en las que ha aparecido.
-  - Implementar paginación con la funcionalidad de la API. (opcional)
+  - Implementar paginación con la funcionalidad de la API. (opcional) o mediante la generación del URL dinámico
   - Botón para **agregar/quitar de favoritos** (estado global con Zustand).
-  - Buscador por medio de nombre
+  - Buscador por medio de nombre por petición a la API.
 
 - `/favorites` – Favoritos  
   - Mostrar lista de personajes marcados como favoritos (desde Zustand).
