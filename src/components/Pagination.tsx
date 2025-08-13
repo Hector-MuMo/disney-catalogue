@@ -1,73 +1,63 @@
 import { MoveLeft, MoveRight } from 'lucide-react';
-import type { JSX } from 'react';
+import { type JSX } from 'react';
 
-export function Pagination({
-  pagination,
-  setPagination,
-  data,
-}: {
-  pagination: any;
-  setPagination: any;
-  data?: any;
-}): JSX.Element {
-  const currentPage = pagination.pageIndex + 1;
-  const totalPages = data?.totalPages ?? 0;
+type PaginationProps = {
+  onPageChange: (page: any) => any;
+  totalPages: any;
+  initialPage?: any;
+};
 
-  const goToPage = (page: number): void => {
-    if (page < 0 || page > totalPages) return;
-    setPagination((prev) => ({ ...prev, pageIndex: page }));
+export function Pagination({ onPageChange, totalPages, initialPage = 0 }: PaginationProps): JSX.Element {
+  const currentPage = initialPage;
+
+  const handlePageChange = (newPage: number): void => {
+    if (newPage < 0 || newPage >= totalPages) return;
+
+    onPageChange(newPage);
   };
 
   const getDisplayedPages = (): (number | 'dots')[] => {
-    const total = totalPages;
-    const current = currentPage;
-
-    const pages: (number | 'dots')[] = [];
-
-    if (total <= 4) {
-      return Array.from({ length: total }, (_, i) => i + 1);
+    if (totalPages <= 5) {
+      return Array.from({ length: totalPages }, (_, i) => i);
     }
 
-    // Always show the first page
-    pages.push(1);
+    const pages: (number | 'dots')[] = [0]; // First page (0-based)
 
-    if (current > 3) {
+    if (currentPage > 2) {
       pages.push('dots');
     }
 
-    // Show central pages
-    const start = Math.max(2, current - 1);
-    const end = Math.min(total - 1, current + 1);
+    // Calculate range around current page
+    const start = Math.max(1, currentPage - 1);
+    const end = Math.min(totalPages - 2, currentPage + 1);
 
     for (let i = start; i <= end; i++) {
-      if (i !== 1 && i !== total) {
+      if (i !== 0 && i !== totalPages - 1) {
         pages.push(i);
       }
     }
 
-    if (current < total - 2) {
+    if (currentPage < totalPages - 3) {
       pages.push('dots');
     }
 
-    // Last page is always shown
-    pages.push(total);
+    pages.push(totalPages - 1); // Last page
 
     return pages;
   };
 
   return (
-    <div className="flex items-center justify-end gap-4 px-4 py-3">
-      {/* Previous */}
+    <div aria-label="Pagination" className="flex items-center justify-end gap-4 px-4 py-3">
       <button
-        onClick={() => currentPage > 1 && goToPage(currentPage - 2)}
-        disabled={currentPage === 1}
-        className="text-sm text-base-base hover:underline disabled:opacity-30 disabled:cursor-not-allowed disabled:text-zinc-500 cursor-pointer"
+        onClick={() => handlePageChange(currentPage - 1)}
+        disabled={currentPage === 0}
+        aria-label="Previous page"
+        className="p-2 rounded-md hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed text-white cursor-pointer"
       >
-        <MoveLeft />
+        <MoveLeft aria-hidden="true" />
       </button>
 
-      {/* Page buttons */}
-      <div className="flex flex-wrap items-center gap-1">
+      <div className="flex items-center gap-1">
         {getDisplayedPages().map((item, index) =>
           item === 'dots' ? (
             <span key={`dots-${index}`} className="px-2 text-gray-500 select-none">
@@ -76,26 +66,25 @@ export function Pagination({
           ) : (
             <button
               key={item}
-              onClick={() => goToPage(item - 1)}
-              className={`px-3 py-1 rounded-md text-sm ${
-                currentPage === item
-                  ? 'bg-main-button-700 text-white font-semibold'
-                  : ' text-gray-700 hover:bg-gray-300 cursor-pointer'
+              onClick={() => handlePageChange(item)}
+              aria-current={currentPage === item ? 'page' : undefined}
+              className={`px-3 py-1 rounded-md text-sm text-white cursor-pointer ${
+                currentPage === item ? 'bg-blue-600 text-white font-semibold' : ' hover:bg-gray-700'
               }`}
             >
-              {item}
+              {item + 1}
             </button>
           ),
         )}
       </div>
 
-      {/* Next */}
       <button
-        onClick={() => currentPage < totalPages && goToPage(currentPage)}
-        disabled={currentPage === totalPages}
-        className="text-sm text-base-base hover:underline disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+        onClick={() => handlePageChange(currentPage + 1)}
+        disabled={currentPage >= totalPages - 1}
+        aria-label="Next page"
+        className="p-2 rounded-md hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed text-white cursor-pointer"
       >
-        <MoveRight className="inline-block" />
+        <MoveRight aria-hidden="true" />
       </button>
     </div>
   );
