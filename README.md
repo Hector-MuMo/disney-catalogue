@@ -73,3 +73,5 @@ El objetivo principal es evaluar:
 - [React Query](https://react-query.tanstack.com/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [ShadCn](https://ui.shadcn.com/)
+- [Iconos](https://lucide.dev/guide/packages/lucide-react)
+- [Figma](https://www.figma.com/design/LXNo5Jtw9vChYv9NKaIdXs/Untitled?node-id=0-1&t=XfNP1rVCkS2VwLVP-1)
