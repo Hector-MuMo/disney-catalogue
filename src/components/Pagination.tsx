@@ -2,9 +2,9 @@ import { MoveLeft, MoveRight } from 'lucide-react';
 import { type JSX } from 'react';
 
 type PaginationProps = {
-  onPageChange: (page: any) => any;
-  totalPages: any;
-  initialPage?: any;
+  onPageChange: (page: number) => void;
+  totalPages: number;
+  initialPage?: number;
 };
 
 export function Pagination({ onPageChange, totalPages, initialPage = 0 }: PaginationProps): JSX.Element {
