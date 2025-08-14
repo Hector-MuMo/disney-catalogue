@@ -23,3 +23,8 @@ export interface Character {
   imageUrl: string;
   url: string;
 }
+
+export interface Favourite {
+  isFavourite: boolean;
+  characterId: number;
+}
