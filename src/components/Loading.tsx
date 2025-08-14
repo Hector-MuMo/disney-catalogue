@@ -1,6 +1,6 @@
-import React from 'react';
+import type { JSX } from 'react';
 
-const Loading = () => {
+const Loading = (): JSX.Element => {
   return <div>Loading</div>;
 };
 

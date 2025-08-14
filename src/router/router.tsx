@@ -3,6 +3,7 @@ import { App } from '../App';
 import { APP_ROUTES } from './appRoutes';
 import Favorites from '../pages/Favorites';
 import Characters from '../pages/Characters';
+
 export const router = createBrowserRouter([
   {
     path: APP_ROUTES.HOME,

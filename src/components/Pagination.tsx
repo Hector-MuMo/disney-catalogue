@@ -11,6 +11,7 @@ export function Pagination({ onPageChange, totalPages, initialPage = 0 }: Pagina
   const currentPage = initialPage;
 
   const handlePageChange = (newPage: number): void => {
+    console.log(newPage);
     if (newPage < 0 || newPage >= totalPages) return;
 
     onPageChange(newPage);

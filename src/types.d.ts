@@ -6,8 +6,8 @@ interface DisneyApiResponse {
 interface DisneyApiInfo {
   count: number;
   totalPages: number;
-  previousPage: null;
-  nextPage: string;
+  previousPage: string | null;
+  nextPage: string | null;
 }
 
 export interface Character {
