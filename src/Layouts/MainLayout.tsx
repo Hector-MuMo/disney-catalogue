@@ -33,16 +33,6 @@ const MainLayout = ({ children }: MainLayoutProps): JSX.Element => {
           >
             Favourites
           </NavLink>
-          <NavLink
-            to="/character"
-            className={({ isActive }) =>
-              isActive
-                ? 'rounded-xl py-2 px-5 mr-1 bg-blue-950 text-amber-50'
-                : 'rounded-xl py-2 px-5 mr-1 bg-blue-300 text-amber-50'
-            }
-          >
-            Characters Detail
-          </NavLink>
         </div>
       </nav>
       {children}

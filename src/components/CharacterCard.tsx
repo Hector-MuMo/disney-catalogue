@@ -4,20 +4,29 @@ import { Card, CardAction, CardDescription, CardHeader, CardTitle } from '@/comp
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Clapperboard, Gamepad2, ShieldPlus, Star, Swords, Theater } from 'lucide-react';
 import { useDisneyStore } from '../store/disneyStore';
+import { Link } from 'react-router';
 
 interface CharacterCardProps {
   character: Character;
+  cardType: string;
 }
 
-const CharacterCard = ({ character }: CharacterCardProps): JSX.Element => {
+const CharacterCard = ({ character, cardType }: CharacterCardProps): JSX.Element => {
   const [isFavourite, setIsFavourite] = useState<boolean>(false);
-  const { favourites, updateFavourite } = useDisneyStore();
+  const { favourites, updateFavourite, deleteFavourite } = useDisneyStore();
 
   const checkCharacterFavourite = (): void => {
-    const char = favourites.find((char) => char.characterId === character._id);
+    const char = favourites.find((fav) => fav.character._id === character._id);
 
     if (char && char.isFavourite) {
-      setIsFavourite(!isFavourite);
+      setIsFavourite(true);
+    }
+
+    if (char && !char.isFavourite) {
+      deleteFavourite({
+        isFavourite,
+        character,
+      });
     }
   };
 
@@ -26,16 +35,11 @@ const CharacterCard = ({ character }: CharacterCardProps): JSX.Element => {
 
     updateFavourite({
       isFavourite: !isFavourite,
-      characterId: character._id,
+      character,
     });
   };
 
-  useEffect(() => {
-    checkCharacterFavourite();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return (
+  const normalCard = (
     <Card
       style={{ backgroundColor: '#00161A', borderColor: '#30CFB5', boxShadow: '0px 0px 1px 1px #30CFB5' }}
       className="p-5 w-full flex flex-row justify-center items-center"
@@ -90,6 +94,42 @@ const CharacterCard = ({ character }: CharacterCardProps): JSX.Element => {
       </CardHeader>
     </Card>
   );
+
+  const favCard = (
+    <Card
+      style={{ backgroundColor: '#00161A', borderColor: '#30CFB5', boxShadow: '0px 0px 1px 1px #30CFB5' }}
+      className="p-5 w-full flex flex-row justify-center items-center"
+    >
+      <Avatar className=" size-35">
+        <AvatarImage src={character.imageUrl} />
+        <AvatarFallback>NO IMG</AvatarFallback>
+      </Avatar>
+      <CardHeader className="w-100 px-3">
+        <CardTitle className="text-3xl text-amber-50">
+          <Link to={`/character/${character._id}`}>{character.name}</Link>
+        </CardTitle>
+        <CardAction>
+          <div
+            onClick={handleStart}
+            className={
+              isFavourite
+                ? 'p-1 rounded-3xl bg-yellow-800 hover:bg-yellow-700'
+                : 'p-1 rounded-3xl bg-red-950 hover:bg-red-900'
+            }
+          >
+            {isFavourite ? <Star color="#ffff00" size={35} /> : <Star color="#ff0000" size={35} />}
+          </div>
+        </CardAction>
+      </CardHeader>
+    </Card>
+  );
+
+  useEffect(() => {
+    checkCharacterFavourite();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return <>{cardType === '/favorites' ? favCard : normalCard}</>;
 };
 
 export default CharacterCard;

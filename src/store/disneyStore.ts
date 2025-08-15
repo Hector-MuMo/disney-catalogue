@@ -5,6 +5,7 @@ interface DisneyState {
   characters: Character[];
   favourites: Favourite[];
   updateFavourite: (favourite: Favourite) => void;
+  deleteFavourite: (favourite: Favourite) => void;
   addCharacter?: (character: Character) => void;
   deleteCharacter?: (character: Character) => void;
 }
@@ -16,10 +17,17 @@ export const useDisneyStore = create<DisneyState>((set) => ({
     set((state) => ({
       favourites:
         state.favourites.length > 0
-          ? state.favourites.find((item) => item.characterId === favourite.characterId)
-            ? state.favourites.map((item) => (item.characterId === favourite.characterId ? favourite : item))
+          ? state.favourites.find((item) => item.character._id === favourite.character._id)
+            ? state.favourites.map((item) => (item.character._id === favourite.character._id ? favourite : item))
             : [...state.favourites, favourite]
           : [favourite],
+    })),
+  deleteFavourite: (favourite): void =>
+    set((state) => ({
+      favourites:
+        state.favourites.length > 0
+          ? state.favourites.filter((fav) => fav.character._id !== favourite.character._id)
+          : state.favourites,
     })),
   addCharacter: (name): void =>
     set((state) => ({

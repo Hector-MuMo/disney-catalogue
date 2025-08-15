@@ -1,5 +1,5 @@
 export const APP_ROUTES = {
   HOME: '/',
   FAVORITES: '/favorites',
-  CHARACTER_DETAILS: '/character/',
+  CHARACTER_DETAILS: '/character/:id',
 };

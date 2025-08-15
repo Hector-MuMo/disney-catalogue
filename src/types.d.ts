@@ -26,5 +26,5 @@ export interface Character {
 
 export interface Favourite {
   isFavourite: boolean;
-  characterId: number;
+  character: Character;
 }

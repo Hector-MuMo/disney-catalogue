@@ -29,7 +29,7 @@ export function App(): JSX.Element {
   const handlePages = (page: string): void => {
     const loadNewPage = async (url: string | null): Promise<void> => {
       try {
-        const res = await fetch(url);
+        const res = await fetch(url ?? '');
         if (!res.ok) {
           throw new Error('Error getting characters. Try again later.');
         }
