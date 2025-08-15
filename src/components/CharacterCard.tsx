@@ -3,21 +3,23 @@ import type { Character, Favourite } from '../types';
 import { Card, CardAction, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Star } from 'lucide-react';
+import { useDisneyStore } from '../store/disneyStore';
 
 interface CharacterCardProps {
   character: Character;
-  toggleFavourite: (favourite: Favourite) => void;
 }
 
-const CharacterCard = ({ character, toggleFavourite }: CharacterCardProps): JSX.Element => {
+const CharacterCard = ({ character }: CharacterCardProps): JSX.Element => {
   const [isFavourite, setIsFavourite] = useState<boolean>(false);
+  const { updateFavourite } = useDisneyStore();
 
   const handleStart = (): void => {
-    toggleFavourite({
+    setIsFavourite(!isFavourite);
+
+    updateFavourite({
       isFavourite: !isFavourite,
       characterId: character._id,
     });
-    setIsFavourite(!isFavourite);
   };
 
   return (

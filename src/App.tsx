@@ -1,7 +1,7 @@
 import { useEffect, useState, lazy, Suspense, type JSX } from 'react';
 import MainLayout from './Layouts/MainLayout';
 import Loading from './components/Loading';
-import type { Character, DisneyApiInfo, DisneyApiResponse, Favourite } from './types';
+import type { Character, DisneyApiInfo, DisneyApiResponse } from './types';
 import './App.css';
 import {
   Pagination,
@@ -22,10 +22,6 @@ export function App(): JSX.Element {
     previousPage: null,
     nextPage: '',
   });
-
-  const handleFavourite = (favourite: Favourite): void => {
-    //console.log(favourite);
-  };
 
   const handlePages = (page: string): void => {
     const loadNewPage = async (url: string | null): Promise<void> => {
@@ -83,7 +79,7 @@ export function App(): JSX.Element {
     <MainLayout>
       <section className="w-full h-full flex flex-col items-center justify-center bg-gray-800">
         <Suspense fallback={<Loading />}>
-          <CardsList characters={characters} toggleFavourite={handleFavourite} />
+          <CardsList characters={characters} />
         </Suspense>
         <Pagination className="my-5">
           <PaginationContent>
