@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router';
 import { App } from '../App';
 import { APP_ROUTES } from './appRoutes';
 import Favorites from '../pages/Favorites';
-import Characters from '../pages/Characters';
+import Characters from '../pages/Character';
 
 export const router = createBrowserRouter([
   {

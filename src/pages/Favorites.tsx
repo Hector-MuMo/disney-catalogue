@@ -1,4 +1,4 @@
-import { useEffect, type JSX } from 'react';
+import { type JSX } from 'react';
 import MainLayout from '../Layouts/MainLayout';
 import { useLocation } from 'react-router';
 import CardsList from '../components/CardsList';
