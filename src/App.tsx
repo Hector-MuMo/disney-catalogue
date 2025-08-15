@@ -10,11 +10,12 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import InputSearch from './components/InputSearch';
+import useDebounce from './hooks/useDebounce';
 
 const CardsList = lazy(() => import('./components/CardsList'));
 
 export function App(): JSX.Element {
-  //const [page, setPage] = useState<number>(0);
   const [characters, setCharacters] = useState<Character[]>([]);
   const [apiInfo, setApiInfo] = useState<DisneyApiInfo>({
     count: 30,
@@ -22,6 +23,8 @@ export function App(): JSX.Element {
     previousPage: null,
     nextPage: '',
   });
+  const [characterSearched, setCharacterSearched] = useState<string>('');
+  const debounceValue = useDebounce(characterSearched, 1000);
 
   const handlePages = (page: string): void => {
     const loadNewPage = async (url: string | null): Promise<void> => {
@@ -51,6 +54,10 @@ export function App(): JSX.Element {
     }
   };
 
+  const handleSearch = (character: string): void => {
+    setCharacterSearched(character);
+  };
+
   const getCharacters = async (): Promise<void> => {
     try {
       const res = await fetch('https://api.disneyapi.dev/character?pageSize=20');
@@ -71,13 +78,41 @@ export function App(): JSX.Element {
     }
   };
 
+  const searchCharacters = async (character: string): Promise<void> => {
+    try {
+      const res = await fetch(`https://api.disneyapi.dev/character?name=${character}`);
+      if (!res.ok) {
+        throw new Error(`Error getting ${character}. Try again later.`);
+      }
+
+      const chars = (await res.json()) as DisneyApiResponse;
+      setCharacters(chars.data);
+      setApiInfo(chars.info);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error('Error:' + error.message);
+      } else {
+        throw new Error('Error in server');
+      }
+    }
+  };
+
   useEffect(() => {
     void getCharacters();
   }, []);
 
+  useEffect(() => {
+    if (debounceValue.length > 0) {
+      void searchCharacters(debounceValue);
+    } else {
+      void getCharacters();
+    }
+  }, [debounceValue]);
+
   return (
     <MainLayout>
       <section className="w-full h-full flex flex-col items-center justify-center bg-gray-800">
+        <InputSearch characterSearched={characterSearched} handleSearch={handleSearch} />
         <Suspense fallback={<Loading />}>
           <CardsList characters={characters} />
         </Suspense>

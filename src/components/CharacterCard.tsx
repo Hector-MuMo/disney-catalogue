@@ -1,8 +1,8 @@
-import { useState, type JSX } from 'react';
-import type { Character, Favourite } from '../types';
+import { useEffect, useState, type JSX } from 'react';
+import type { Character } from '../types';
 import { Card, CardAction, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Star } from 'lucide-react';
+import { Clapperboard, Gamepad2, ShieldPlus, Star, Swords, Theater } from 'lucide-react';
 import { useDisneyStore } from '../store/disneyStore';
 
 interface CharacterCardProps {
@@ -11,7 +11,15 @@ interface CharacterCardProps {
 
 const CharacterCard = ({ character }: CharacterCardProps): JSX.Element => {
   const [isFavourite, setIsFavourite] = useState<boolean>(false);
-  const { updateFavourite } = useDisneyStore();
+  const { favourites, updateFavourite } = useDisneyStore();
+
+  const checkCharacterFavourite = (): void => {
+    const char = favourites.find((char) => char.characterId === character._id);
+
+    if (char && char.isFavourite) {
+      setIsFavourite(!isFavourite);
+    }
+  };
 
   const handleStart = (): void => {
     setIsFavourite(!isFavourite);
@@ -21,6 +29,11 @@ const CharacterCard = ({ character }: CharacterCardProps): JSX.Element => {
       characterId: character._id,
     });
   };
+
+  useEffect(() => {
+    checkCharacterFavourite();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Card
@@ -34,25 +47,32 @@ const CharacterCard = ({ character }: CharacterCardProps): JSX.Element => {
       <CardHeader className="w-100 px-3">
         <CardTitle className="text-3xl text-amber-50">{character.name}</CardTitle>
         <CardDescription className="flex flex-wrap">
-          <span className="px-2 py-1 mx-1 my-1 bg-purple-300 rounded-xl text-amber-50">
+          <span className="flex px-2 py-1 mx-1 my-1 bg-purple-300 rounded-xl text-amber-50">
             <span className="mr-1 px-1 bg-purple-700 text-amber-50 rounded-xl ">
               {character.parkAttractions.length}
             </span>
+            <Theater className="mx-1" size={15} />
             Atracciones
           </span>
-          <span className="px-2 py-1 mx-1 my-1 bg-cyan-700 rounded-xl text-amber-50">
+          <span className="flex px-2 py-1 mx-1 my-1 bg-cyan-700 rounded-xl text-amber-50">
             <span className="mr-1 px-1 bg-cyan-400 text-amber-50 rounded-xl ">{character.films.length}</span>
+            <Clapperboard className="mx-1" size={15} />
             Peliculas
           </span>
-          <span className="px-2 py-1 mx-1 my-1 bg-fuchsia-900 rounded-xl text-amber-50">
+          <span className="flex px-2 py-1 mx-1 my-1 bg-fuchsia-900 rounded-xl text-amber-50">
             <span className="mr-1 px-1 bg-fuchsia-600 text-amber-50 rounded-xl ">{character.videoGames.length}</span>
+            <Gamepad2 className="mx-1" size={15} />
             Videojuegos
           </span>
-          <span className="px-2 py-1 mx-1 my-1 bg-red-950 rounded-xl text-amber-50">
-            <span className="mr-1 px-1 bg-red-800 text-amber-50 rounded-xl ">{character.enemies.length}</span> Enemigos
+          <span className="flex px-2 py-1 mx-1 my-1 bg-red-950 rounded-xl text-amber-50">
+            <span className="mr-1 px-1 bg-red-800 text-amber-50 rounded-xl ">{character.enemies.length}</span>
+            <Swords className="mx-1" size={15} />
+            Enemigos
           </span>
-          <span className="px-2 py-1 mx-1 my-1 bg-green-900 rounded-xl text-amber-50">
-            <span className="mr-1 px-1 bg-green-700 text-amber-50 rounded-xl ">{character.allies.length}</span> Aliados
+          <span className="flex px-2 py-1 mx-1 my-1 bg-green-900 rounded-xl text-amber-50">
+            <span className="mr-1 px-1 bg-green-700 text-amber-50 rounded-xl ">{character.allies.length}</span>
+            <ShieldPlus className="mx-1" size={15} />
+            Aliados
           </span>
         </CardDescription>
         <CardAction>

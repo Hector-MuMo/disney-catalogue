@@ -1,5 +1,5 @@
 import type { JSX } from 'react';
-import type { Character, Favourite } from '../types';
+import type { Character } from '../types';
 import CharacterCard from './CharacterCard';
 
 interface CardsListPros {
