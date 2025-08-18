@@ -28,3 +28,9 @@ export interface Favourite {
   isFavourite: boolean;
   character: Character;
 }
+
+export type Page = {
+  character: string;
+  type: string;
+  url: string;
+};

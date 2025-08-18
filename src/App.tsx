@@ -1,7 +1,7 @@
-import { useEffect, useState, lazy, Suspense, type JSX } from 'react';
+import { useEffect, useState, type JSX } from 'react';
 import MainLayout from './Layouts/MainLayout';
 import Loading from './components/Loading';
-import type { Character, DisneyApiInfo, DisneyApiResponse } from './types';
+import type { Character, DisneyApiInfo, DisneyApiResponse, Page } from './types';
 import './App.css';
 import {
   Pagination,
@@ -12,8 +12,10 @@ import {
 } from '@/components/ui/pagination';
 import InputSearch from './components/InputSearch';
 import useDebounce from './hooks/useDebounce';
-
-const CardsList = lazy(() => import('./components/CardsList'));
+import { useQuery } from '@tanstack/react-query';
+import CardsList from './components/CardsList';
+import { getCharacters } from './utils/apiRequests';
+import GenericError from './components/GenericError';
 
 export function App(): JSX.Element {
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -25,32 +27,25 @@ export function App(): JSX.Element {
   });
   const [characterSearched, setCharacterSearched] = useState<string>('');
   const debounceValue = useDebounce(characterSearched, 1000);
+  const [pageType, setPageType] = useState<Page>({
+    character: '',
+    type: 'init',
+    url: '',
+  });
 
   const handlePages = (page: string): void => {
-    const loadNewPage = async (url: string | null): Promise<void> => {
-      try {
-        const res = await fetch(url ?? '');
-        if (!res.ok) {
-          throw new Error('Error getting characters. Try again later.');
-        }
-
-        const chars = (await res.json()) as DisneyApiResponse;
-
-        setCharacters(chars.data);
-        setApiInfo(chars.info);
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          throw new Error('Error:' + error.message);
-        } else {
-          throw new Error('Error in server');
-        }
-      }
-    };
-
-    if (page === 'next') {
-      void loadNewPage(apiInfo.nextPage);
-    } else {
-      void loadNewPage(apiInfo.previousPage);
+    if (page === 'next' && data && data.info.nextPage) {
+      setPageType({
+        character: '',
+        type: 'next',
+        url: data.info.nextPage,
+      });
+    } else if (page === 'prev' && data && data.info.previousPage) {
+      setPageType({
+        character: '',
+        type: 'prev',
+        url: data.info.previousPage,
+      });
     }
   };
 
@@ -58,64 +53,29 @@ export function App(): JSX.Element {
     setCharacterSearched(character);
   };
 
-  const getCharacters = async (): Promise<void> => {
-    try {
-      const res = await fetch('https://api.disneyapi.dev/character?pageSize=20');
-      if (!res.ok) {
-        throw new Error('Error getting characters. Try again later.');
-      }
-
-      const chars = (await res.json()) as DisneyApiResponse;
-
-      setCharacters(chars.data);
-      setApiInfo(chars.info);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        throw new Error('Error:' + error.message);
-      } else {
-        throw new Error('Error in server');
-      }
-    }
+  const searchCharacters = (character: string): void => {
+    setPageType({ ...pageType, type: 'search', character });
   };
 
-  const searchCharacters = async (character: string): Promise<void> => {
-    try {
-      const res = await fetch(`https://api.disneyapi.dev/character?name=${character}`);
-      if (!res.ok) {
-        throw new Error(`Error getting ${character}. Try again later.`);
-      }
-
-      const chars = (await res.json()) as DisneyApiResponse;
-      setCharacters(chars.data);
-      setApiInfo(chars.info);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        throw new Error('Error:' + error.message);
-      } else {
-        throw new Error('Error in server');
-      }
-    }
-  };
-
-  useEffect(() => {
-    void getCharacters();
-  }, []);
+  const { data, isPending, isError, error } = useQuery({
+    queryKey: ['fetchCharacters', pageType],
+    queryFn: () => getCharacters(pageType),
+  });
 
   useEffect(() => {
     if (debounceValue.length > 0) {
       void searchCharacters(debounceValue);
     } else {
-      void getCharacters();
+      void searchCharacters('');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceValue]);
 
   return (
     <MainLayout>
       <section className="w-full h-full flex flex-col items-center justify-center bg-gray-800">
         <InputSearch characterSearched={characterSearched} handleSearch={handleSearch} />
-        <Suspense fallback={<Loading />}>
-          <CardsList characters={characters} />
-        </Suspense>
+        {isPending ? <Loading /> : isError ? <GenericError /> : <CardsList characters={data ? data.data : []} />}
         <Pagination className="my-5">
           <PaginationContent>
             <PaginationItem className="text-amber-50">
