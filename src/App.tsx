@@ -1,7 +1,7 @@
 import { useEffect, useState, type JSX } from 'react';
 import MainLayout from './Layouts/MainLayout';
 import Loading from './components/Loading';
-import type { Character, DisneyApiInfo, DisneyApiResponse, Page } from './types';
+import type { Page } from './types';
 import './App.css';
 import {
   Pagination,
@@ -18,13 +18,6 @@ import { getCharacters } from './utils/apiRequests';
 import GenericError from './components/GenericError';
 
 export function App(): JSX.Element {
-  const [characters, setCharacters] = useState<Character[]>([]);
-  const [apiInfo, setApiInfo] = useState<DisneyApiInfo>({
-    count: 30,
-    totalPages: 1,
-    previousPage: null,
-    nextPage: '',
-  });
   const [characterSearched, setCharacterSearched] = useState<string>('');
   const debounceValue = useDebounce(characterSearched, 1000);
   const [pageType, setPageType] = useState<Page>({
@@ -75,7 +68,13 @@ export function App(): JSX.Element {
     <MainLayout>
       <section className="w-full h-full flex flex-col items-center justify-center bg-gray-800">
         <InputSearch characterSearched={characterSearched} handleSearch={handleSearch} />
-        {isPending ? <Loading /> : isError ? <GenericError /> : <CardsList characters={data ? data.data : []} />}
+        {isPending ? (
+          <Loading />
+        ) : isError ? (
+          <GenericError errorMsg={error} />
+        ) : (
+          <CardsList characters={data ? data.data : []} />
+        )}
         <Pagination className="my-5">
           <PaginationContent>
             <PaginationItem className="text-amber-50">
