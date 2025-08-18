@@ -29,12 +29,12 @@ export const useDisneyStore = create<DisneyState>((set) => ({
           ? state.favourites.filter((fav) => fav.character._id !== favourite.character._id)
           : state.favourites,
     })),
-  addCharacter: (name): void =>
-    set((state) => ({
-      characters: [...state.characters, name],
-    })),
-  deleteCharacter: (character): void =>
-    set((state) => ({
-      characters: state.characters,
-    })),
+  // addCharacter: (name): void =>
+  //   set((state) => ({
+  //     characters: [...state.characters, name],
+  //   })),
+  // deleteCharacter: (character): void =>
+  //   set((state) => ({
+  //     characters: state.characters,
+  //   })),
 }));
