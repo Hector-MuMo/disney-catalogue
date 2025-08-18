@@ -22,7 +22,7 @@ const CardsList = ({ characters = [], favourites = [], location = '/' }: CardsLi
         ));
 
   return (
-    <div className="mt-10 w-auto grid grid-cols-2 auto-rows-auto gap-3 justify-self-center">
+    <div className="mt-10 w-auto grid grid-cols-1 md:grid-cols-2 auto-rows-auto gap-3 justify-self-center">
       {shownList.length > 0 ? (
         shownList
       ) : (

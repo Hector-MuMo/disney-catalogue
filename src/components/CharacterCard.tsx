@@ -42,13 +42,13 @@ const CharacterCard = ({ character, cardType }: CharacterCardProps): JSX.Element
   const normalCard = (
     <Card
       style={{ backgroundColor: '#00161A', borderColor: '#30CFB5', boxShadow: '0px 0px 1px 1px #30CFB5' }}
-      className="p-5 w-full flex flex-row justify-center items-center"
+      className="p-2 sm:p-5 w-auto sm:w-full flex sm:flex-row justify-center items-center"
     >
-      <Avatar className=" size-35">
+      <Avatar className="size-30 sm:size-35">
         <AvatarImage src={character.imageUrl} />
         <AvatarFallback>NO IMG</AvatarFallback>
       </Avatar>
-      <CardHeader className="w-100 px-3">
+      <CardHeader className="w-80 sm:w-100 px-3">
         <CardTitle className="text-3xl text-amber-50">{character.name}</CardTitle>
         <CardDescription className="flex flex-wrap">
           <span className="flex px-2 py-1 mx-1 my-1 bg-purple-300 rounded-xl text-amber-50">
@@ -98,13 +98,13 @@ const CharacterCard = ({ character, cardType }: CharacterCardProps): JSX.Element
   const favCard = (
     <Card
       style={{ backgroundColor: '#00161A', borderColor: '#30CFB5', boxShadow: '0px 0px 1px 1px #30CFB5' }}
-      className="p-5 w-full flex flex-row justify-center items-center"
+      className="p-2 sm:p-5 w-auto sm:w-full flex sm:flex-row justify-center items-center"
     >
-      <Avatar className=" size-35">
+      <Avatar className="size-30 sm:size-35">
         <AvatarImage src={character.imageUrl} />
         <AvatarFallback>NO IMG</AvatarFallback>
       </Avatar>
-      <CardHeader className="w-100 px-3">
+      <CardHeader className="w-80 sm:w-100 px-3">
         <CardTitle className="text-3xl text-amber-50">
           <Link to={`/character/${character._id}`}>{character.name}</Link>
         </CardTitle>

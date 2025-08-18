@@ -12,7 +12,7 @@ const InputSearch = ({ characterSearched, handleSearch }: InputSearchProps): JSX
     <div className="w-full mt-5 flex justify-center items-center">
       <Input
         placeholder="Busca a tu personaje Disney"
-        className="ml-5 w-1/4 text-amber-50"
+        className="ml-5 w-40 sm:w-80 text-amber-50"
         value={characterSearched}
         onChange={(e) => handleSearch(e.target.value)}
       />

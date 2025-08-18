@@ -56,10 +56,10 @@ const Character = (): JSX.Element => {
 
   return (
     <MainLayout>
-      <div className="w-full h-screen flex flex-col items-center justify-center bg-gray-800">
-        <div className="mt-10 h-full">
+      <div className="w-full h-full flex flex-col items-center justify-center bg-gray-800">
+        <div className="my-10 w-auto h-full">
           <CharacterCard character={fav?.character ?? gosthCharacter} cardType="/" />
-          <div className="mt-10 grid grid-flow-col gap-5 overflow-auto">
+          <div className="mt-10 grid grid-col-1 gap-5 overflow-auto">
             <div className="p-3 bg-purple-700 text-amber-50 rounded-sm">
               <h4 className="text-xl underline mb-2">Atracciones</h4>
               {attractionsList && attractionsList?.length > 0 ? attractionsList : <span>No tiene Atracciones :(</span>}
